@@ -6,11 +6,12 @@ class Tables
     // 생성자
     public function __construct($db)
     {
+        // echo __CLASS__;
         $this->db = $db; 
     }
     public function main()
     {
-        echo "메인 호출이에요.";
+        
         $html = new \Module\Html\HtmlTable;
         $query = "SHOW TABLES";
         $result = $this->db->queryExecute($query);
@@ -19,7 +20,13 @@ class Tables
         $rows = []; // 배열 초기화
         for ($i=0;$i<$count;$i++) {
             $row = mysqli_fetch_object($result);
-            $rows []= $row; // 배열 추가
+            // $rows []= $row; // 배열 추가
+            // 배열 * 배열 = 2차원 배열.
+            // 키, 값 연상배열
+            $rows []= [
+                'num'=>$i,
+                'name'=>"<a href='/TableInfo/".$row->Tables_in_php."'>".$row->Tables_in_php."</a>"
+            ];
         }
         $content = $html->table($rows);
         $body = file_get_contents("../Resource/table.html");
